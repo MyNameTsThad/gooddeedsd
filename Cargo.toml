@@ -1,0 +1,15 @@
+[package]
+name = "gooddeeds"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "^1.0.42"
+daemonizr = "^0.1.5"
+env_logger = "^0.11.5"
+
+[[bin]]
+name = "gooddeedsd"
+
+[[bin]]
+name = "gooddeedsctl"
