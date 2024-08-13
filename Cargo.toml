@@ -6,7 +6,9 @@ edition = "2021"
 [dependencies]
 anyhow = "^1.0.42"
 daemonizr = "^0.1.5"
-env_logger = "^0.11.5"
+env_logger = "0.11.5"
+log = "0.4.22"
+surf = "2.3.2"
 
 [[bin]]
 name = "gooddeedsd"
