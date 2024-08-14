@@ -3,10 +3,7 @@ use daemonizr::{Daemonizr, DaemonizrError, Stderr, Stdout};
 use env_logger::{Builder, Target};
 use gooddeeds::LoginData;
 use log::{debug, error, info, warn};
-use reqwest::header::{
-    HeaderMap, HeaderValue, ACCEPT, ACCEPT_ENCODING, ACCEPT_LANGUAGE, CONNECTION, CONTENT_TYPE,
-    COOKIE, DNT, ORIGIN, REFERER, USER_AGENT,
-};
+use reqwest::header::{HeaderMap, HeaderValue, ACCEPT, CONTENT_TYPE};
 use serde_json::json;
 
 use std::io::{Read, Write};
@@ -119,7 +116,7 @@ fn client(
                 .write_all(format!("Token set to {}", login_data.token).as_bytes())
                 .context("[Error] Unable to write token to client")?;
         }
-        &"kill" => stop(),
+        &"stop" => stop(),
         _ => {}
     }
     Ok(())
@@ -133,33 +130,8 @@ fn try_login(
     let url = "https://goodevent.tdc.mi.th/api/v1/auth/signin";
 
     let mut headers = HeaderMap::new();
-    headers.insert(
-        USER_AGENT,
-        HeaderValue::from_static(
-            "Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0",
-        ),
-    );
     headers.insert(ACCEPT, HeaderValue::from_static("application/json"));
-    headers.insert(
-        ACCEPT_LANGUAGE,
-        HeaderValue::from_static("ja,en-US;q=0.7,en;q=0.3"),
-    );
-    headers.insert(
-        ACCEPT_ENCODING,
-        HeaderValue::from_static("gzip, deflate, br, zstd"),
-    );
-    headers.insert(
-        REFERER,
-        HeaderValue::from_static("https://goodevent.tdc.mi.th/"),
-    );
     headers.insert(CONTENT_TYPE, HeaderValue::from_static("application/json"));
-    headers.insert(
-        ORIGIN,
-        HeaderValue::from_static("https://goodevent.tdc.mi.th"),
-    );
-    headers.insert(CONNECTION, HeaderValue::from_static("keep-alive"));
-    headers.insert(COOKIE, HeaderValue::from_static("userDetail=%7B%22username%22%3A%22%22%2C%22access_token%22%3A%22%22%2C%22refresh_token%22%3A%22%22%2C%22exp%22%3A0%7D; unitTraining=%7B%22id%22%3A%221%22%2C%22unitTrainingId%22%3A%221%22%2C%22name%22%3A%22%E0%B8%A8%E0%B8%B9%E0%B8%99%E0%B8%A2%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B8%99%E0%B8%B1%E0%B8%81%E0%B8%A8%E0%B8%B6%E0%B8%81%E0%B8%A9%E0%B8%B2%E0%B8%A7%E0%B8%B4%E0%B8%8A%E0%B8%B2%E0%B8%97%E0%B8%AB%E0%B8%B2%E0%B8%A3%22%2C%22shortName%22%3A%22%E0%B8%A8%E0%B8%A8%E0%B8%97.%22%2C%22description%22%3Anull%2C%22orderToDisplay%22%3Anull%7D"));
-    headers.insert(DNT, HeaderValue::from_static("1"));
 
     let result = web_client
         .post(url)
